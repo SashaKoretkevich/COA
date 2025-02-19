@@ -1,0 +1,80 @@
+specification {
+    element person {
+        style {
+            shape person
+            color green
+        }
+    }
+    element softwareSystem
+    element container
+}
+
+model 
+{
+  user = person "Пользователь" "Пользователь Social media"
+
+  socialMedia = softwareSystem "Social media" {
+    apiGateway = container "API Gateway" {
+      description "Маршрутизация запросов и управление доступом"
+      technology "FastAPI"
+    }
+
+    userService = container "User Service" {
+      description "Сервис пользователей, который отвечает за регистрацию и аутентификацию пользователей, а также хранит всю информацию по ним и их роли."
+      technology "Python"
+    }
+    analyticsService = container "Analytics Service" {
+      description "Сервис статистики для подсчета лайков, просмотров, комментариев"
+      technology "Python"
+    }
+
+    postCommentService = container "Post/Comment Service" {
+      description "Сервис постов и комментариев"
+      technology "Python"
+    }
+    kafka = container "Kafka" {
+      description "Обмен событиями между сервисами"
+      technology "Message Broker"
+      style {
+        shape queue
+      }
+    }
+    postgresDbUser = container "PostgreSQLUser" {
+      description "Хранение данных пользователей"
+      technology "Database"
+      style {
+        shape cylinder
+      }
+    }
+    postgresDbPC = container "PostgreSQLPC" {
+      description "Хранение данных постов и комментариев"
+      technology "Database"
+      style {
+        shape cylinder
+      }
+    }
+   clickhouseDb = container "ClickhouseDB" {
+      description "Хранение статистики по лайкам, просмотрам, комментариям"
+      technology "Database"
+    }
+  }
+
+  user -> socialMedia.apiGateway "Использует" "HTTPS"
+  socialMedia.apiGateway -> socialMedia.postCommentService "Маршрутизирует" "JSON/HTTPS"
+  socialMedia.apiGateway -> socialMedia.userService "Маршрутизирует" "JSON/HTTPS"
+  socialMedia.apiGateway -> socialMedia.analyticsService "Маршрутизирует" "JSON/HTTPS"
+
+  socialMedia.userService -> socialMedia.postgresDbUser "Читает/Пишет" "SQL"
+  socialMedia.postCommentService -> socialMedia.postgresDbPC "Читает/Пишет" "SQL"
+  socialMedia.analyticsService -> socialMedia.clickhouseDb "Читает/Пишет" "SQL"
+
+  socialMedia.postCommentService -> socialMedia.kafka "Отправляет" "post/comment/like/view_event"
+  socialMedia.kafka -> socialMedia.analyticsService "Получает" "post/comment/like/view_event"
+ 
+}
+
+views {
+   view index {
+        include *
+    }
+}
