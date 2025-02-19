@@ -14,6 +14,11 @@ model
   user = person "Пользователь" "Пользователь Social media"
 
   socialMedia = softwareSystem "Social media" {
+    ui = container "UI" {
+      description "Веб-приложение"
+      technology "JavaScript"
+    }
+
     apiGateway = container "API Gateway" {
       description "Маршрутизация запросов и управление доступом"
       technology "FastAPI"
@@ -23,7 +28,7 @@ model
       description "Сервис пользователей, который отвечает за регистрацию и аутентификацию пользователей, а также хранит всю информацию по ним и их роли."
       technology "Python"
     }
-    analyticsService = container "Analytics Service" {
+    analyticsService = container "Statistics Service" {
       description "Сервис статистики для подсчета лайков, просмотров, комментариев"
       technology "Python"
     }
@@ -59,7 +64,8 @@ model
     }
   }
 
-  user -> socialMedia.apiGateway "Использует" "HTTPS"
+  user -> socialMedia.ui "Использует" "HTTPS"
+  socialMedia.ui -> socialMedia.apiGateway "Отправляет запросы" "Rest API"
   socialMedia.apiGateway -> socialMedia.postCommentService "Маршрутизирует" "JSON/HTTPS"
   socialMedia.apiGateway -> socialMedia.userService "Маршрутизирует" "JSON/HTTPS"
   socialMedia.apiGateway -> socialMedia.analyticsService "Маршрутизирует" "JSON/HTTPS"
