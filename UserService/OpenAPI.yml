@@ -1,0 +1,280 @@
+openapi: 3.1.0
+info:
+  title: FastAPI
+  version: 0.1.0
+paths:
+  /:
+    get:
+      summary: Home Page
+      operationId: home_page__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /app/v1/users/register:
+    post:
+      tags:
+        - users
+      summary: Register
+      operationId: register_app_v1_users_register_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userCreate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /app/v1/users/login:
+    post:
+      tags:
+        - users
+      summary: Login
+      operationId: login_app_v1_users_login_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userLogin'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /app/v1/users/profile:
+    get:
+      tags:
+        - users
+      summary: Getuser
+      operationId: getUser_app_v1_users_profile_get
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tokenSend'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+        - users
+      summary: Updateprofile
+      operationId: updateProfile_app_v1_users_profile_put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userUpdate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+        - loc
+        - msg
+        - type
+      title: ValidationError
+    tokenSend:
+      properties:
+        token:
+          type: string
+          title: Token
+      type: object
+      required:
+        - token
+      title: tokenSend
+    userCreate:
+      properties:
+        firstName:
+          type: string
+          maxLength: 30
+          minLength: 3
+          title: Firstname
+          description: 'Имя, от 3 до 30 символов'
+        secondName:
+          type: string
+          maxLength: 30
+          minLength: 3
+          title: Secondname
+          description: 'Фамилия, от 3 до 30 символов'
+        userName:
+          type: string
+          maxLength: 20
+          minLength: 3
+          title: Username
+          description: 'Ник, от 3 до 20 символов'
+        mail:
+          type: string
+          format: email
+          title: Mail
+          description: Электронная почта
+        password:
+          type: string
+          maxLength: 20
+          minLength: 10
+          title: Password
+          description: 'Пароль, от 10 до 20 знаков'
+        age:
+          type: integer
+          title: Age
+        gender:
+          type: string
+          title: Gender
+        status:
+          type: string
+          maxLength: 30
+          minLength: 3
+          title: Status
+          description: 'Статус, от 3 до 30 знаков'
+        phoneNumber:
+          type: string
+          title: Phonenumber
+          description: 'Номер телефона в международном формате, начинающийся с ''+'''
+      type: object
+      required:
+        - firstName
+        - secondName
+        - userName
+        - mail
+        - password
+        - age
+        - gender
+        - status
+        - phoneNumber
+      title: userCreate
+    userLogin:
+      properties:
+        userName:
+          anyOf:
+            - type: string
+              maxLength: 20
+              minLength: 3
+            - type: 'null'
+          title: Username
+          description: 'Ник, от 3 до 20 символов'
+        mail:
+          anyOf:
+            - type: string
+              format: email
+            - type: 'null'
+          title: Mail
+          description: Электронная почта
+        password:
+          type: string
+          maxLength: 20
+          minLength: 10
+          title: Password
+          description: 'Пароль, от 10 до 20 знаков'
+      type: object
+      required:
+        - password
+      title: userLogin
+    userUpdate:
+      properties:
+        firstName:
+          type: string
+          maxLength: 30
+          minLength: 3
+          title: Firstname
+          description: 'Имя, от 3 до 30 символов'
+        secondName:
+          type: string
+          maxLength: 30
+          minLength: 3
+          title: Secondname
+          description: 'Фамилия, от 3 до 30 символов'
+        age:
+          type: integer
+          title: Age
+        gender:
+          type: string
+          title: Gender
+        status:
+          type: string
+          maxLength: 30
+          minLength: 3
+          title: Status
+          description: 'Статус, от 3 до 30 знаков'
+        phoneNumber:
+          type: string
+          title: Phonenumber
+          description: 'Номер телефона в международном формате, начинающийся с ''+'''
+        token:
+          type: string
+          title: Token
+      type: object
+      required:
+        - firstName
+        - secondName
+        - age
+        - gender
+        - status
+        - phoneNumber
+        - token
+      title: userUpdate
