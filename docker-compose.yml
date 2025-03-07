@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_DB: social_network
+      POSTGRES_PASSWORD: SocialMedia2025
+    ports:
+      - "5432:5432"
+    restart: always
+
+  user-service:
+    build: ./UserService
+    container_name: user_service
+    depends_on:
+      - db
+    environment:
+      DBNAME: social_network
+      USER: user
+      PASSWORD: SocialMedia2025
+      HOST: db
+      SECRET_KEY: gV64m9aIzFG4qpgVphvQbPQrtAO0nM-7YwwOvu0XPt5KJOjAy4AfgLkqJXYEt
+      ALGORITHM: HS256
+    ports:
+      - "8002:8002"
+    restart: always
+
+  api-gateway:
+    build: ./APIGateway
+    container_name: api_gateway
+    depends_on:
+      - user-service
+    environment:
+      USER_SERVICE: http://user-service:8002/app/v1/users/
+    ports:
+      - "8080:8080"
+    restart: always
