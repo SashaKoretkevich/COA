@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package post;
+
+service PostService {
+  rpc CreatePost (CreatePostRequest) returns (CreatePostResponse);
+  rpc GetPost (GetPostRequest) returns (GetPostResponse);
+  rpc UpdatePost (UpdatePostRequest) returns (UpdatePostResponse);
+  rpc DeletePost (DeletePostRequest) returns (DeletePostResponse);
+  rpc ListPosts (ListPostsRequest) returns (ListPostsResponse);
+}
+
+message CreatePostRequest {
+  string title = 1;
+  string description = 2;
+  int32 userId = 3;
+  bool isPrivate = 4;
+  repeated string tags = 5;
+}
+
+message CreatePostResponse {
+  int32 postId = 1;
+}
+
+message GetPostRequest {
+  int32 postId = 1;
+  int32 userId = 2;
+}
+
+message GetPostResponse {
+  int32 postId = 1;
+  string title = 2;
+  string description = 3;
+  int32 userId = 4;
+  string creationTime = 5;
+  string lastUpdate = 6;
+  bool isPrivate = 7;
+  repeated string tags = 8;
+}
+
+message UpdatePostRequest {
+  int32 postId = 1;
+  int32 userId = 2;
+  string title = 3;
+  string description = 4;
+  bool isPrivate = 5;
+  repeated string tags = 6;
+}
+
+message UpdatePostResponse {
+  int32 postId = 1;
+  string title = 2;
+  string description = 3;
+  int32 userId = 4;
+  string creationTime = 5;
+  string lastUpdate = 6;
+  bool isPrivate = 7;
+  repeated string tags = 8;
+}
+
+message DeletePostRequest {
+  int32 postId = 1;
+  int32 userId = 2;
+}
+
+message DeletePostResponse {
+  bool success = 1;
+  int32 postId = 2;
+}
+
+message ListPostsRequest {
+  int32 offset = 1;
+  int32 limit = 2;
+  int32 userId = 3;
+}
+
+message ListPostsResponse {
+  repeated GetPostResponse posts = 1;
+}
