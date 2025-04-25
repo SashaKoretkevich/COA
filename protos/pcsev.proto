@@ -1,0 +1,151 @@
+syntax = "proto3";
+
+package post;
+
+service PostService {
+  rpc CreatePost (CreatePostRequest) returns (CreatePostResponse);
+  rpc GetPost (GetPostRequest) returns (GetPostResponse);
+  rpc UpdatePost (UpdatePostRequest) returns (UpdatePostResponse);
+  rpc DeletePost (DeletePostRequest) returns (DeletePostResponse);
+  rpc ListPosts (ListPostsRequest) returns (ListPostsResponse);
+  rpc ListComments (ListCommentsRequest) returns (ListCommentsResponse);
+  rpc ViewPost (ViewPostRequest) returns (ViewPostResponse);
+  rpc LikePost (LikePostRequest) returns (LikePostResponse);
+  rpc CommentPost (CommentPostRequest) returns (CommentPostResponse);
+}
+
+message CreatePostRequest {
+  string title = 1;
+  string description = 2;
+  int32 userId = 3;
+  bool isPrivate = 4;
+  repeated string tags = 5;
+}
+
+message CreatePostResponse {
+  int32 postId = 1;
+  string title = 2;
+  string description = 3;
+  int32 userId = 4;
+  string created_at = 5;
+  string updated_at = 6;
+  bool isPrivate = 7;
+  repeated string tags = 8;
+}
+
+message GetPostRequest {
+  int32 postId = 1;
+  int32 userId = 2;
+}
+
+message GetPostResponse {
+  int32 postId = 1;
+  string title = 2;
+  string description = 3;
+  int32 userId = 4;
+  string created_at = 5;
+  string updated_at = 6;
+  bool isPrivate = 7;
+  repeated string tags = 8;
+}
+
+message UpdatePostRequest {
+  int32 postId = 1;
+  int32 userId = 2;
+  string title = 3;
+  string description = 4;
+  bool isPrivate = 5;
+  repeated string tags = 6;
+}
+
+message UpdatePostResponse {
+  int32 postId = 1;
+  string title = 2;
+  string description = 3;
+  int32 userId = 4;
+  string created_at = 5;
+  string updated_at = 6;
+  bool isPrivate = 7;
+  repeated string tags = 8;
+}
+
+message DeletePostRequest {
+  int32 postId = 1;
+  int32 userId = 2;
+}
+
+message DeletePostResponse {
+  bool success = 1;
+  int32 postId = 2;
+}
+
+message ListPostsRequest {
+  int32 offset = 1;
+  int32 limit = 2;
+  int32 userId = 3;
+}
+
+message ListPostsResponse {
+  repeated GetPostResponse posts = 1;
+}
+
+message Comment {
+  int32  commentId = 1;
+  int32  postId = 2;
+  int32  userId = 3;
+  string text = 4;
+  string created_at = 5;
+}
+
+message ListCommentsRequest {
+  int32 offset = 1;
+  int32 limit = 2;
+  int32 userId = 3;
+  int32 postId = 4;
+}
+
+message ListCommentsResponse {
+  repeated Comment comments = 1;
+}
+
+message ViewPostRequest {
+  int32 postId = 1;
+  int32 userId = 2;
+}
+
+message ViewPostResponse {
+  int32 postId = 1;
+  string title = 2;
+  string description = 3;
+  int32 userId = 4;
+  string created_at = 5;
+  string updated_at = 6;
+  bool isPrivate = 7;
+  repeated string tags = 8;
+}
+
+message LikePostRequest {
+  int32 postId = 1;
+  int32 userId = 2;
+}
+
+message LikePostResponse {
+  int32 likeId = 1;
+  int32 userId = 2;
+  int32 postId = 3;
+  string added_at = 4;
+}
+
+message CommentPostRequest {
+  int32 postId = 1;
+  int32 userId = 2;
+  string text = 3;
+}
+
+message CommentPostResponse {
+  int32 commentId = 1;
+  int32 postId = 2;
+  int32 userId = 3;
+  string text = 4;
+  string created_at = 5;
+}
